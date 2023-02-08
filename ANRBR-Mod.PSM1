@@ -1,7 +1,7 @@
 <#
     Welcome to my library
 
-    V. 1.0
+    V. 1.1
 #>
 
 function Export-ExcelANRBR {
@@ -46,5 +46,27 @@ function Get-TimeFileANRBR {
     Get-Date -f yyyyMMdd-HHmmss
 }
 
-Export-ModuleMember -Function Export-ExcelANRBR
-Export-ModuleMember -Function Get-TimeFileANRBR
+function Copy-ModuleToUserMods {
+    param (
+        [Parameter(Mandatory)][string]$ModulePSMPath
+    )
+    $userModulesDir = ($env:PSModulePath -split ";")[0]
+    $moduleName = [io.path]::GetFileNameWithoutExtension($ModulePSMPath)
+    $moduleDir = "$userModulesDir\$moduleName"
+    $modulePSMDir = [io.path]::GetDirectoryName($ModulePSMPath)
+    $modulePSD = "$modulePSMDir\$moduleName.psd1"
+
+    if (-Not (Test-Path $moduleDir)) {
+        New-Item -ItemType Directory -Path $moduleDir
+    }
+    Copy-Item -Path $ModulePSMPath -Destination $moduleDir -Force
+    Copy-Item -Path $modulePSD -Destination $moduleDir -Force
+    if (Get-Module -Name $moduleName) {
+        Remove-Module -Name $moduleName
+    }
+}
+#Copy-ModuleToUserMods -ModulePSMPath '.\ANRBR-Mod.PSM1'
+
+#Export-ModuleMember -Function Export-ExcelANRBR
+#Export-ModuleMember -Function Get-TimeFileANRBR
+#Export-ModuleMember -Function Copy-ModuleToUserMods
