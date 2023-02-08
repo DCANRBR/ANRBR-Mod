@@ -3,6 +3,7 @@
 
     V. 1.1
 #>
+#Requires -module ImportExcel
 
 function Export-ExcelANRBR {
     param (
@@ -66,7 +67,3 @@ function Copy-ModuleToUserMods {
     }
 }
 #Copy-ModuleToUserMods -ModulePSMPath '.\ANRBR-Mod.PSM1'
-
-#Export-ModuleMember -Function Export-ExcelANRBR
-#Export-ModuleMember -Function Get-TimeFileANRBR
-#Export-ModuleMember -Function Copy-ModuleToUserMods
